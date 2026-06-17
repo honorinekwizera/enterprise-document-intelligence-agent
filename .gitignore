@@ -11,3 +11,9 @@ __pycache__/
 
 # VS Code
 .vscode/
+
+# Uploaded test documents
+uploads/
+
+# Chroma database (we'll create this later)
+chroma_db/
