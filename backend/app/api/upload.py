@@ -5,6 +5,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunking_service import chunk_text
+from app.services.vector_store_service import store_document_chunks
 
 # Router groups all upload-related endpoints together.
 router = APIRouter()
@@ -39,6 +40,8 @@ async def upload_file(file: UploadFile = File(...)):
     extracted_text = extract_text_from_pdf(str(file_path))
     # Split the extracted text into smaller searchable chunks.
     chunks = chunk_text(extracted_text)
+    #calls the vector_store_service.py function for ChromaDB
+    stored_chunk_count = store_document_chunks(file.filename, chunks)
 
     return {
     "message": "File uploaded, text extracted, and chunked successfully",
@@ -47,6 +50,8 @@ async def upload_file(file: UploadFile = File(...)):
     "character_count": len(extracted_text),
     # Number of chunks created
     "chunk_count": len(chunks),
+    #ChromaDb vector stored chunks
+    "stored_chunk_count": stored_chunk_count,
     # First 500 characters of the extracted text
     "text_preview": extracted_text[:500],
     # Preview of the first chunk
