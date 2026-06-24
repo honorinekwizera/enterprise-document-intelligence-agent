@@ -5,6 +5,7 @@ from app.api.upload import router as upload_router
 from app.api.chat import router as chat_router
 from app.api.documents import router as documents_router
 from app.api.stats import router as stats_router
+from fastapi.middleware.cors import CORSMiddleware
 
 # --------------------------------
 # Application Configuration
@@ -17,7 +18,17 @@ app = FastAPI(
     description="AI-powered document analysis platform",
     version="0.1.0"
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --------------------------------
 # Register Routers
